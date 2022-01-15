@@ -1,0 +1,31 @@
+{% extends 'app/base.html' %}
+
+{% block contenido %}
+{% load humanize %}
+
+<div class="container py-3">
+    <h2 class="text-center">Listado de productos</h2>
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Precio</th>
+            <th scope="col">Marca</th>
+            <th scope="col">Descripcion</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for p in productos %}
+          <tr>
+            <th scope="row">{{p.id}}</th>
+            <td>{{p.nombre}}</td>
+            <td>{{p.precio | intcomma }}</td>
+            <td>{{p.marca}}</td>
+            <td>{{p.descripcion}}</td>            
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+</div>
+{% endblock %}

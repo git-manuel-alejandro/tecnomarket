@@ -9,7 +9,7 @@ class ProductoAdmin(admin.ModelAdmin):
     list_editable = ['precio']
     search_fields = ['nombre']
     list_filter = ['marca', 'nuevo']
-    list_per_page = 1
+    list_per_page = 5
 
 admin.site.register(models.Marca)
 admin.site.register(models.Producto , ProductoAdmin)
