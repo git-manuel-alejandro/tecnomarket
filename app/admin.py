@@ -1,6 +1,7 @@
 from re import search
 from django.contrib import admin
 from .import models
+from .forms import ProductoForm
 
 # Register your models here.
 
@@ -10,6 +11,7 @@ class ProductoAdmin(admin.ModelAdmin):
     search_fields = ['nombre']
     list_filter = ['marca', 'nuevo']
     list_per_page = 5
+    form = ProductoForm
 
 admin.site.register(models.Marca)
 admin.site.register(models.Producto , ProductoAdmin)

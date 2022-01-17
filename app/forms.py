@@ -2,6 +2,12 @@ from django import forms
 from .models import Contacto, Producto
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from .validators import MaxSizeValidator
+from django.forms import ValidationError
+
+
+
+
 class ContactoForm(forms.ModelForm):
 
     class Meta:
@@ -11,6 +17,18 @@ class ContactoForm(forms.ModelForm):
 
 
 class ProductoForm(forms.ModelForm):
+    nombre = forms.CharField(min_length=3 , max_length= 50)
+    imagen = forms.ImageField(required= False , validators=[MaxSizeValidator(max_file_size=1)])
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        existe = Producto.objects.filter(nombre = nombre).exists()
+
+        if existe:
+            raise ValidationError('Producto ya existe')
+        else:
+            return nombre
+
 
     class Meta:
         model = Producto

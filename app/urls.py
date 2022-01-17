@@ -1,8 +1,12 @@
 import imp
-from django.urls import path
+from django.urls import path , include
 from .import views
+from rest_framework import routers
 # from views import home
 
+
+router = routers.DefaultRouter()
+router.register('producto', views.ProductoViewSet)
 
 urlpatterns = [
     path('', views.home , name="home"),
@@ -14,4 +18,6 @@ urlpatterns = [
     path('eliminar-producto/<id>/', views.eliminar_producto , name="eliminar_producto"),
     path('eliminar-producto/<id>/', views.eliminar_producto , name="eliminar_producto"),
     path('registro/', views.registro , name="registro"),
+    path('api/', include(router.urls)),
+
 ]

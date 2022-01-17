@@ -7,7 +7,28 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.http import Http404
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required , permission_required
+from rest_framework import viewsets
+from .serializers import ProductoSerializer
 # Create your views here.
+
+# ----------------A P I----------------------------
+
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
+
+    def get_queryset(self):
+        productos = Producto.objects.all()
+        nombre = self.request.GET.get('nombre')
+
+        if nombre:
+                                            #col     / var
+            productos = productos.filter(nombre__contains = nombre)
+        return productos
+
+# ----------------A P I----------------------------
+
 
 def home(request):
     productos = Producto.objects.all()
@@ -31,7 +52,7 @@ def contacto(request):
 
 def galeria(request):
     return render(request, 'app/galeria.html')
-
+@permission_required('app.add_producto')
 def agregar_producto(request):
 
     data = {
@@ -47,7 +68,7 @@ def agregar_producto(request):
             data['form'] = formulario
 
     return render(request, 'app/producto/agregar.html' , data)
-
+@permission_required('app.view_producto')
 def listar_producto(request):
     productos = Producto.objects.all()
     page = request.GET.get('page' , 1)
@@ -62,7 +83,7 @@ def listar_producto(request):
         'paginator' : paginator
     }
     return render(request, 'app/producto/listar.html', data)
-
+@permission_required('app.change_producto')
 def editar_producto(request, id):
     # producto = Producto.objects.get(id)
     producto = get_object_or_404(Producto , id = id)
@@ -83,7 +104,7 @@ def editar_producto(request, id):
 
 
     return render(request, 'app/producto/modificar.html' , data)
-
+@permission_required('app.delete_producto')
 def eliminar_producto(request, id):
     producto = get_object_or_404(Producto , id = id)
     producto.delete()
